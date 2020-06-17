@@ -14,7 +14,7 @@ function App() {
   return (
     <BrowserRouter>
       <FirebaseContext.Provider value={{ user, firebase }}>
-        <div className="container is-fluid">
+        <div className="container">
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/login" component={Login} />
