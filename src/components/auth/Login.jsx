@@ -101,7 +101,7 @@ const Login = (props) => {
             className="button is-text"
             onClick={() => setLogin((prevLogin) => !prevLogin)}
           >
-            Dont have an account? Sign up here
+            Don't have an account? Sign up here
           </button>
         ) : (
           <button
