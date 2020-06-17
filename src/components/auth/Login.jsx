@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import useFormValidation from "../auth/useFormValidation";
 import validateLogin from "../auth/validateLogin";
 import firebase from "../../firebase/firebase";
-import { Link } from "react-router-dom";
 
 const INITIAL_STATE = {
   name: "",

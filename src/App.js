@@ -6,6 +6,7 @@ import FirebaseContext from "./firebase/context";
 import useAuth from "./components/auth/useAuth";
 import Login from "./components/auth/Login";
 import Home from "./components/Home";
+import CreatePost from "./components/CreatePost";
 
 function App() {
   const user = useAuth();
@@ -17,6 +18,7 @@ function App() {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/login" component={Login} />
+            <Route path="/create-post" component={CreatePost} />
           </Switch>
         </div>
       </FirebaseContext.Provider>

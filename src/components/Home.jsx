@@ -20,7 +20,7 @@ const Home = () => {
         <div className="navbar-end">
           {user ? (
             <>
-              <a className="navbar-item">{user.displayName}</a>
+              <p className="navbar-item">{user.displayName}</p>
               <a className="navbar-item" onClick={() => firebase.logout()}>
                 Logout
               </a>

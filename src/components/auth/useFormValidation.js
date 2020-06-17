@@ -15,7 +15,7 @@ function useFormValidation(initialstate, validate, authenticate) {
         setIsSubmitting(false);
       }
     }
-  }, [errors]);
+  }, [errors, authenticate, isSubmitting]);
 
   const handleChange = (event) => {
     event.persist();
