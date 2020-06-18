@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import useFormValidation from "../auth/useFormValidation";
 import validateLogin from "../auth/validateLogin";
 import firebase from "../../firebase/firebase";
+import FirebaseContext from "../../firebase/context";
 
 const INITIAL_STATE = {
   name: "",
+  avatar: "",
   email: "",
   password: "",
 };
 
 const Login = (props) => {
+  const { user } = useContext(FirebaseContext);
+  if (user) {
+    props.history.push("/");
+  }
   const {
     handleSubmit,
     handleChange,
@@ -19,14 +25,23 @@ const Login = (props) => {
     isSubmitting,
   } = useFormValidation(INITIAL_STATE, validateLogin, authenticateUser);
   const [login, setLogin] = useState(true);
+  const [avatar, setAvatar] = useState(null);
   const [firebaseError, setFirebaseError] = useState(null);
+
+  async function avatarUpload(event) {
+    const avatar = event.target.files[0];
+    const storageRef = firebase.storage.ref();
+    const avatarRef = storageRef.child(avatar.name);
+    await avatarRef.put(avatar);
+    setAvatar(await avatarRef.getDownloadURL());
+  }
 
   async function authenticateUser() {
     const { name, email, password } = values;
     try {
       login
         ? await firebase.login(email, password)
-        : await firebase.register(name, email, password);
+        : await firebase.register(name, email, password, avatar);
       props.history.push("/");
     } catch (error) {
       setFirebaseError(error.message);
@@ -35,25 +50,57 @@ const Login = (props) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h1 className="title has-text-centered">
+      <h1 className="title has-text-centered mt-5">
         {login ? "Log in" : "Create Account"}
       </h1>
       {!login && (
-        <div className="field">
-          <label className="label">Name</label>
-          <div className="control has-icons-left">
-            <input
-              className="input"
-              name="name"
-              type="text"
-              onChange={handleChange}
-              value={values.name}
-            />
-            <span className="icon is-small is-left">
-              <i className="fas fa-user"></i>
-            </span>
+        <>
+          <div className="columns is-centered">
+            <figure className="image is-128x128">
+              <img
+                className="is-rounded"
+                src={
+                  avatar
+                    ? avatar
+                    : "https://bulma.io/images/placeholders/128x128.png"
+                }
+              />
+            </figure>
           </div>
-        </div>
+          <div className="field">
+            <div className="file is-small is-centered is-boxed is-primary">
+              <label className="file-label">
+                <input
+                  className="file-input"
+                  type="file"
+                  name="avatar"
+                  onChange={avatarUpload}
+                />
+                <span className="file-cta">
+                  <span className="file-icon">
+                    <i className="fas fa-upload"></i>
+                  </span>
+                  <span className="file-label">Upload Avatar</span>
+                </span>
+              </label>
+            </div>
+          </div>
+          <div className="field">
+            <label className="label">Name</label>
+            <div className="control has-icons-left">
+              <input
+                className="input"
+                name="name"
+                type="text"
+                onChange={handleChange}
+                value={values.name}
+              />
+              <span className="icon is-small is-left">
+                <i className="fas fa-user"></i>
+              </span>
+            </div>
+          </div>
+        </>
       )}
       <div className="field">
         <label className="label">Email</label>

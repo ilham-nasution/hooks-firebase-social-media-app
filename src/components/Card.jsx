@@ -10,20 +10,20 @@ const Card = (props) => {
       </div>
       <div className="card-content">
         <div className="media">
-          {/* <div className="media-left">
+          <div className="media-left">
             <figure className="image is-48x48">
               <img src={props.avatar} alt="avatar" />
             </figure>
-          </div> */}
+          </div>
           <div className="media-content">
-            <p className="title is-4"> By: {props.username}</p>
+            <p className="title is-4"> {props.username}</p>
           </div>
         </div>
 
         <div className="content">
           {props.caption}
           <br />
-          <time datetime="2016-1-1">{props.created}</time>
+          <time dateTime="2016-1-1">{props.created}</time>
         </div>
       </div>
     </div>

@@ -7,6 +7,7 @@ import useAuth from "./components/auth/useAuth";
 import Login from "./components/auth/Login";
 import Home from "./components/Home";
 import CreatePost from "./components/CreatePost";
+import Navbar from "./components/Navbar";
 
 function App() {
   const user = useAuth();
@@ -15,6 +16,7 @@ function App() {
     <BrowserRouter>
       <FirebaseContext.Provider value={{ user, firebase }}>
         <div className="container">
+          <Navbar />
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/login" component={Login} />

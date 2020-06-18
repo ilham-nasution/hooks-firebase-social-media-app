@@ -9,7 +9,6 @@ const INITIAL_STATE = {
 
 const CreatePost = (props) => {
   const [imageURL, setImageURL] = useState(null);
-  const [imageName, setImageName] = useState("");
   const { firebase, user } = useContext(FirebaseContext);
   const { handleSubmit, handleChange, values } = useFormValidation(
     INITIAL_STATE,
@@ -18,7 +17,6 @@ const CreatePost = (props) => {
 
   async function imageUpload(event) {
     const image = event.target.files[0];
-    setImageName(image.name);
     const storageRef = firebase.storage.ref();
     const imageRef = storageRef.child(image.name);
     await imageRef.put(image);
@@ -36,6 +34,7 @@ const CreatePost = (props) => {
         postedBy: {
           id: user.uid,
           name: user.displayName,
+          avatar: user.photoURL,
         },
         likeCount: 0,
         likes: [],
@@ -48,24 +47,34 @@ const CreatePost = (props) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="mt-5" onSubmit={handleSubmit}>
       <h1 className="title has-text-centered">Create Post</h1>
+      <div className="columns is-centered">
+        <figure className="image is-256x256">
+          <img
+            src={
+              imageURL
+                ? imageURL
+                : "https://bulma.io/images/placeholders/256x256.png"
+            }
+          />
+        </figure>
+      </div>
       <div className="field">
-        <div className="file has-name is-fullwidth">
+        <div className="file is-small is-centered is-boxed is-primary">
           <label className="file-label">
             <input
               className="file-input"
               type="file"
-              name="image"
+              name="avatar"
               onChange={imageUpload}
             />
             <span className="file-cta">
               <span className="file-icon">
                 <i className="fas fa-upload"></i>
               </span>
-              <span className="file-label">Upload an image</span>
+              <span className="file-label">Upload Image</span>
             </span>
-            <span className="file-name">{imageName}</span>
           </label>
         </div>
       </div>
