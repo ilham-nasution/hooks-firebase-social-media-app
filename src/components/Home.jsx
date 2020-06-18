@@ -1,21 +1,21 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import FirebaseContext from "../firebase/context";
 import Card from "./Card";
 
 const Home = () => {
-  const { user, firebase } = useContext(FirebaseContext);
+  const { firebase } = useContext(FirebaseContext);
   const [posts, setPosts] = useState([]);
 
-  useEffect(() => {
-    getPosts();
-  }, []);
-
-  function getPosts() {
+  const getPosts = useCallback(() => {
     firebase.db
       .collection("posts")
       .orderBy("created_at", "desc")
       .onSnapshot(handleSnapshot);
-  }
+  }, [firebase]);
+
+  useEffect(() => {
+    getPosts();
+  }, [getPosts]);
 
   function handleSnapshot(snapshot) {
     const posts = snapshot.docs.map((doc) => {
@@ -25,7 +25,7 @@ const Home = () => {
   }
 
   return (
-    <div className="columns is-centered">
+    <div className="column is-half is-offset-one-quarter">
       {posts.map((post) => (
         <Card
           key={post.id}

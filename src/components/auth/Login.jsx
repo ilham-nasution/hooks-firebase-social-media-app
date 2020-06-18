@@ -59,6 +59,7 @@ const Login = (props) => {
             <figure className="image is-128x128">
               <img
                 className="is-rounded"
+                alt="avatar"
                 src={
                   avatar
                     ? avatar

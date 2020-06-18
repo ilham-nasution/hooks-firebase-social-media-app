@@ -1,18 +1,19 @@
 import React from "react";
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
 const Card = (props) => {
   return (
     <div className="card mt-5">
       <div className="card-image">
         <figure className="image is-4by3">
-          <img src={props.imageURL} alt="post image" />
+          <img src={props.imageURL} alt="post" />
         </figure>
       </div>
       <div className="card-content">
-        <div className="media">
-          <div className="media-left">
-            <figure className="image is-48x48">
-              <img src={props.avatar} alt="avatar" />
+        <div className="media" style={{ alignItems: "center" }}>
+          <div className="media-left" style={{ alignItems: "center" }}>
+            <figure className="image is-48x48 is-square">
+              <img className="is-rounded" src={props.avatar} alt="avatar" />
             </figure>
           </div>
           <div className="media-content">
@@ -21,9 +22,9 @@ const Card = (props) => {
         </div>
 
         <div className="content">
-          {props.caption}
+          <p className="subtitle is-5">{props.caption}</p>
           <br />
-          <time dateTime="2016-1-1">{props.created}</time>
+          <p className="has-text-right">{formatDistanceToNow(props.created)}</p>
         </div>
       </div>
     </div>

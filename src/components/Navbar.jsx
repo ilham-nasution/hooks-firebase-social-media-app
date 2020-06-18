@@ -24,12 +24,16 @@ const Navbar = () => {
         <div className="navbar-end">
           {user ? (
             <>
-              <p className="navbar-item">
+              <a className="navbar-item">
                 <figure className="image is-24x24 mr-2">
-                  <img className="is-rounded" src={user.photoURL} />
+                  <img
+                    className="is-rounded"
+                    src={user.photoURL}
+                    alt="avatar"
+                  />
                 </figure>
                 {user.displayName}
-              </p>
+              </a>
               <a className="navbar-item" onClick={() => firebase.logout()}>
                 Logout
               </a>

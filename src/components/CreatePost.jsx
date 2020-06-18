@@ -52,6 +52,7 @@ const CreatePost = (props) => {
       <div className="columns is-centered">
         <figure className="image is-256x256">
           <img
+            alt="post"
             src={
               imageURL
                 ? imageURL
