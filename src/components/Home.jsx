@@ -29,9 +29,12 @@ const Home = () => {
       {posts.map((post) => (
         <Card
           key={post.id}
+          id={post.id}
+          likes={post.likes}
           avatar={post.postedBy.avatar}
           username={post.postedBy.name}
           caption={post.caption}
+          likeCount={post.likeCount}
           imageURL={post.imageURL}
           created={post.created_at}
         />

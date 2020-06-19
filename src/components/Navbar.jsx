@@ -24,7 +24,7 @@ const Navbar = () => {
         <div className="navbar-end">
           {user ? (
             <>
-              <a className="navbar-item">
+              <NavLink className="navbar-item" to={`/profile/${user.uid}`}>
                 <figure className="image is-24x24 mr-2">
                   <img
                     className="is-rounded"
@@ -33,10 +33,14 @@ const Navbar = () => {
                   />
                 </figure>
                 {user.displayName}
-              </a>
-              <a className="navbar-item" onClick={() => firebase.logout()}>
+              </NavLink>
+              <NavLink
+                to="/"
+                className="navbar-item"
+                onClick={() => firebase.logout()}
+              >
                 Logout
-              </a>
+              </NavLink>
             </>
           ) : (
             <NavLink className="navbar-item" to="/login">

@@ -8,6 +8,7 @@ import Login from "./components/auth/Login";
 import Home from "./components/Home";
 import CreatePost from "./components/CreatePost";
 import Navbar from "./components/Navbar";
+import Profile from "./components/Profile";
 
 function App() {
   const user = useAuth();
@@ -21,6 +22,7 @@ function App() {
             <Route exact path="/" component={Home} />
             <Route path="/login" component={Login} />
             <Route path="/create-post" component={CreatePost} />
+            <Route path="/profile/:id" component={Profile} />
           </Switch>
         </div>
       </FirebaseContext.Provider>
