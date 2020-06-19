@@ -14,9 +14,13 @@ const Card = (props) => {
         if (doc.exists) {
           const previousLikes = doc.data().likes;
           const like = { likedBy: { id: user.uid, name: user.displayName } };
-          if (previousLikes.some((prevLike) => prevLike.id === like.id)) {
+          if (
+            previousLikes.some(
+              (prevLike) => prevLike.likedBy.id === like.likedBy.id
+            )
+          ) {
             const updateLikes = previousLikes.filter(
-              (prevLike) => prevLike.id !== like.id
+              (prevLike) => prevLike.likedBy.id !== like.likedBy.id
             );
             const likeCount = updateLikes.length;
             likeRef.update({ likes: updateLikes, likeCount });
@@ -55,35 +59,23 @@ const Card = (props) => {
               className="far fa-heart mr-2"
             ></i>
           )}
-          {user && !props.likes.length && (
-            <i
-              onClick={handleLike}
-              style={{ cursor: "pointer" }}
-              className="far fa-heart mr-2"
-            ></i>
+          {user && props.likes.some((like) => like.likedBy.id === user.uid) && (
+            <span className="icon has-text-danger">
+              <i
+                onClick={handleLike}
+                style={{ cursor: "pointer" }}
+                className="fas fa-heart mr-2"
+              ></i>
+            </span>
           )}
           {user &&
-            props.likes.map((like) => {
-              if (like.likedBy.id === user.uid) {
-                return (
-                  <span key={like} className="icon has-text-danger">
-                    <i
-                      onClick={handleLike}
-                      style={{ cursor: "pointer" }}
-                      className="fas fa-heart mr-2"
-                    ></i>
-                  </span>
-                );
-              } else {
-                return (
-                  <i
-                    onClick={handleLike}
-                    style={{ cursor: "pointer" }}
-                    className="far fa-heart mr-2"
-                  ></i>
-                );
-              }
-            })}
+            props.likes.every((like) => like.likedBy.id !== user.uid) && (
+              <i
+                onClick={handleLike}
+                style={{ cursor: "pointer" }}
+                className="far fa-heart mr-2"
+              ></i>
+            )}
           <i className="far fa-comment"></i>
           <p>{props.likeCount} likes</p>
           <p className="subtitle is-5">{props.caption}</p>
