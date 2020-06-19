@@ -14,9 +14,17 @@ const Card = (props) => {
         if (doc.exists) {
           const previousLikes = doc.data().likes;
           const like = { likedBy: { id: user.uid, name: user.displayName } };
-          const updateLikes = [...previousLikes, like];
-          const likeCount = updateLikes.length;
-          likeRef.update({ likes: updateLikes, likeCount });
+          if (previousLikes.some((prevLike) => prevLike.id === like.id)) {
+            const updateLikes = previousLikes.filter(
+              (prevLike) => prevLike.id !== like.id
+            );
+            const likeCount = updateLikes.length;
+            likeRef.update({ likes: updateLikes, likeCount });
+          } else {
+            const updateLikes = [...previousLikes, like];
+            const likeCount = updateLikes.length;
+            likeRef.update({ likes: updateLikes, likeCount });
+          }
         }
       });
     }
