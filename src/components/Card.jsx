@@ -79,8 +79,27 @@ const Card = (props) => {
           <i className="far fa-comment"></i>
           <p>{props.likeCount} likes</p>
           <p className="subtitle is-5">{props.caption}</p>
-          <br />
           <p className="has-text-right">{formatDistanceToNow(props.created)}</p>
+          <p>Comments</p>
+          <div className="columns is-vcentered">
+            <figure className="image is-32x32 mb-0 mr-2">
+              <img
+                className="is-rounded"
+                src="https://bulma.io/images/placeholders/32x32.png"
+              />
+            </figure>
+            <p>Subtitle 5</p>
+          </div>
+          <form>
+            <div className="field">
+              <div className="control">
+                <textarea
+                  className="textarea is-small"
+                  placeholder="Comment..."
+                ></textarea>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
