@@ -1,16 +1,19 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { withRouter } from "react-router-dom";
 import FirebaseContext from "../firebase/context";
 
 const Card = (props) => {
   const { firebase, user } = useContext(FirebaseContext);
+  const [comment, setComment] = useState(false);
+  const [commentText, setCommentText] = useState("");
+  const linkRef = firebase.db.collection("posts").doc(props.id);
+
   const handleLike = () => {
     if (!user) {
       props.history.push("/login");
     } else {
-      const likeRef = firebase.db.collection("posts").doc(props.id);
-      likeRef.get().then((doc) => {
+      linkRef.get().then((doc) => {
         if (doc.exists) {
           const previousLikes = doc.data().likes;
           const like = { likedBy: { id: user.uid, name: user.displayName } };
@@ -23,16 +26,45 @@ const Card = (props) => {
               (prevLike) => prevLike.likedBy.id !== like.likedBy.id
             );
             const likeCount = updateLikes.length;
-            likeRef.update({ likes: updateLikes, likeCount });
+            linkRef.update({ likes: updateLikes, likeCount });
           } else {
             const updateLikes = [...previousLikes, like];
             const likeCount = updateLikes.length;
-            likeRef.update({ likes: updateLikes, likeCount });
+            linkRef.update({ likes: updateLikes, likeCount });
           }
         }
       });
     }
   };
+
+  const commentForm = () => {
+    if (user) {
+      setComment(!comment);
+    } else {
+      props.history.push("/login");
+    }
+  };
+
+  const handleComment = () => {
+    linkRef.get().then((doc) => {
+      if (doc.exists) {
+        const previousComments = doc.data().comments;
+        const comment = {
+          postedBy: {
+            id: user.uid,
+            name: user.displayName,
+            avatar: user.photoURL,
+          },
+          created_at: Date.now(),
+          text: commentText,
+        };
+        const updatedComments = [...previousComments, comment];
+        linkRef.update({ comments: updatedComments });
+        setCommentText("");
+      }
+    });
+  };
+
   return (
     <div className="card mt-5">
       <div className="media pt-2 pl-2" style={{ alignItems: "center" }}>
@@ -76,30 +108,47 @@ const Card = (props) => {
                 className="far fa-heart mr-2"
               ></i>
             )}
-          <i className="far fa-comment"></i>
+          <i
+            className="far fa-comment"
+            onClick={commentForm}
+            style={{ cursor: "pointer" }}
+          ></i>
           <p>{props.likeCount} likes</p>
           <p className="subtitle is-5">{props.caption}</p>
           <p className="has-text-right">{formatDistanceToNow(props.created)}</p>
-          <p>Comments</p>
-          <div className="columns is-vcentered">
-            <figure className="image is-32x32 mb-0 mr-2">
-              <img
-                className="is-rounded"
-                src="https://bulma.io/images/placeholders/32x32.png"
-              />
-            </figure>
-            <p>Subtitle 5</p>
-          </div>
-          <form>
-            <div className="field">
-              <div className="control">
-                <textarea
-                  className="textarea is-small"
-                  placeholder="Comment..."
-                ></textarea>
+          {comment && (
+            <>
+              <hr />
+              <p>Comments</p>
+              {props.comments.map((comment) => (
+                <div key={comment.created_at} className="columns is-vcentered">
+                  <figure className="image is-32x32 mb-0 mr-2">
+                    <img className="is-rounded" src={comment.postedBy.avatar} />
+                  </figure>
+                  <p>{comment.text}</p>
+                </div>
+              ))}
+
+              <div className="field">
+                <div className="control">
+                  <textarea
+                    className="textarea is-small"
+                    placeholder="Comment..."
+                    onChange={(event) => setCommentText(event.target.value)}
+                    value={commentText}
+                  ></textarea>
+                  <div className="has-text-right pt-1">
+                    <button
+                      className="button is-small is-right"
+                      onClick={handleComment}
+                    >
+                      Send
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          </form>
+            </>
+          )}
         </div>
       </div>
     </div>
