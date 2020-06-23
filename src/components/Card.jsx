@@ -113,7 +113,10 @@ const Card = (props) => {
             onClick={commentForm}
             style={{ cursor: "pointer" }}
           ></i>
-          <p>{props.likeCount} likes</p>
+          <div className="columns is-gapless mb-0">
+            <p className="mr-2">{props.likeCount} likes</p>
+            <p>{props.comments.length} comments</p>
+          </div>
           <p className="subtitle is-5">{props.caption}</p>
           <p className="has-text-right">{formatDistanceToNow(props.created)}</p>
           {comment && (
@@ -122,10 +125,10 @@ const Card = (props) => {
               <p>Comments</p>
               {props.comments.map((comment) => (
                 <div key={comment.created_at} className="columns is-vcentered">
-                  <figure className="image is-32x32 mb-0 mr-2">
+                  <figure className="image is-24x24 mb-0 mr-2">
                     <img className="is-rounded" src={comment.postedBy.avatar} />
                   </figure>
-                  <p>{comment.text}</p>
+                  <p className="is-size-7">{comment.text}</p>
                 </div>
               ))}
 
