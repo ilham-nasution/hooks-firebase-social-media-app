@@ -2,6 +2,16 @@ import React, { useContext, useState } from "react";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { withRouter } from "react-router-dom";
 import FirebaseContext from "../firebase/context";
+import { slideInDown } from "react-animations";
+import Radium, { StyleRoot } from "radium";
+import { styles } from "react-animations/lib/swing";
+
+const slideDown = {
+  slideInDown: {
+    animation: "x 1s",
+    animationName: Radium.keyframes(slideInDown, "slideInDown"),
+  },
+};
 
 const Card = (props) => {
   const { firebase, user } = useContext(FirebaseContext);
@@ -120,37 +130,44 @@ const Card = (props) => {
           <p className="subtitle is-5">{props.caption}</p>
           <p className="has-text-right">{formatDistanceToNow(props.created)}</p>
           {comment && (
-            <>
+            <StyleRoot>
               <hr />
-              <p>Comments</p>
-              {props.comments.map((comment) => (
-                <div key={comment.created_at} className="columns is-vcentered">
-                  <figure className="image is-24x24 mb-0 mr-2">
-                    <img className="is-rounded" src={comment.postedBy.avatar} />
-                  </figure>
-                  <p className="is-size-7">{comment.text}</p>
-                </div>
-              ))}
-
-              <div className="field">
-                <div className="control">
-                  <textarea
-                    className="textarea is-small"
-                    placeholder="Comment..."
-                    onChange={(event) => setCommentText(event.target.value)}
-                    value={commentText}
-                  ></textarea>
-                  <div className="has-text-right pt-1">
-                    <button
-                      className="button is-small is-right"
-                      onClick={handleComment}
-                    >
-                      Send
-                    </button>
+              <div style={slideDown.slideInDown}>
+                <p>Comments</p>
+                {props.comments.map((comment) => (
+                  <div
+                    key={comment.created_at}
+                    className="columns is-vcentered"
+                  >
+                    <figure className="image is-24x24 mb-0 mr-2">
+                      <img
+                        className="is-rounded"
+                        src={comment.postedBy.avatar}
+                      />
+                    </figure>
+                    <p className="is-size-7">{comment.text}</p>
+                  </div>
+                ))}
+                <div className="field">
+                  <div className="control">
+                    <textarea
+                      className="textarea is-small"
+                      placeholder="Comment..."
+                      onChange={(event) => setCommentText(event.target.value)}
+                      value={commentText}
+                    ></textarea>
+                    <div className="has-text-right pt-1">
+                      <button
+                        className="button is-small is-right"
+                        onClick={handleComment}
+                      >
+                        Send
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </>
+            </StyleRoot>
           )}
         </div>
       </div>
